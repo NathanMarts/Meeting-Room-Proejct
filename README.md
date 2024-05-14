@@ -19,5 +19,6 @@ $ pip install -r requirements.txt
 
 ## Run
 ```
-$ flask --app main run
+$ flask --app app init-db
+$ flask --app app run
 ```
