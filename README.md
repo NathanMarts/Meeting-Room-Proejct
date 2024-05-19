@@ -14,11 +14,11 @@ Um projeto simples em flask
 
 ## Install
 ```
-$ pip install -r requirements.txt
+ pip install -r requirements.txt
 ```
 
 ## Run
 ```
-$ flask --app app init-db
-$ flask --app app run
+ flask --app app init-db
+ flask --app app run
 ```
