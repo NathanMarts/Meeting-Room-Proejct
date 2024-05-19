@@ -33,7 +33,7 @@ function data() {
           this.toasts[this.toasts.length - 1].visible = true;
         }, 10);
         setTimeout(() => {
-          this.removeToast()
+          this.removeToast(0)
         }, 3010);
       },
       removeToast(index) {
