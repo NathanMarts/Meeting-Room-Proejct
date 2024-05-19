@@ -1,12 +1,190 @@
 {% extends "base.html" %}
 {% block title %}Listagem de Reservas{% endblock %}
 {% block content %}
-  <h1 class="text-3xl font-bold">
-    Hello world!
-  </h1>
-  <p>
-    {% if reservations %}
-    Nenhuma reserva
-    {% endif %}
-  </p>
+<div id="x-data" x-data="data()" class="py-10 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="px-4 sm:py-6 lg:px-8">
+      <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <h1 class="text-gray-900 text-3xl font-bold leading-6">Reservas</h1>
+          <p class="text-gray-700 text-lg mt-2">Listagem de todas as reservas, incluindo id, sala, reservado para, data
+            e hora.</p>
+        </div>
+        <div class="sm:flex sm:mt-0 ml-16 mt-4">
+          <button hx-swap="beforeend" @click="modal.open()"
+            class="flex justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm  bg-blue-600 text-white hover:bg-blue-500">Nova
+            Reserva</button>
+        </div>
+      </div>
+      <div class="mt-8 flow-root">
+        <div class="md:flex md:items-center md:justify-end">
+          <div class="flex gap-x-5">
+            <div class="relative flex items-center mt-4 md:mt-0">
+              <span class="absolute">
+                <svg class="text-xl mx-3 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                </svg>
+              </span>
+              <input type="text" placeholder="Buscar" name="search" hx-post="{{ url_for('reserve.search') }}"
+                hx-trigger="input changed delay:500ms, search" hx-target="#tbody_content"
+                class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 focus:border-orange-400 focus:ring-orange-300 focus:outline-none focus:ring focus:ring-opacity-40">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="rounded-lg border border-gray-200 shadow-md my-5">
+        <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+                Id
+              </th>
+              <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+                Reservado para
+              </th>
+              <th scope="col" class="px-6 py-4 font-medium text-gray-900 cursor-pointer">
+                Sala
+              </th>
+              <th scope="col" class="px-6 py-4 font-medium text-gray-900 cursor-pointer">
+                Data - Hora
+              </th>
+              <th scope="col" class="px-6 py-4 font-medium text-gray-900 text-center">Operações</th>
+            </tr>
+          </thead>
+          <tbody hx-confirm="Tem certeza de que deseja deletar?" hx-target="closest tr" hx-swap="outerHTML swap:1s"
+            id="tbody_content" class="divide-y divide-gray-100 border-t border-gray-100">
+            {% include "components/table.html" %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div id="modal-here" x-show="modal.isOpen()" class="relative z-50">
+    <div @click="modal.close()" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div @click.outside="modal.close()"
+          class="relative z-30 transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+          <div class="shadow-sm bg-gradient-to-b from-blue-100 to-blue-50 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div class="sm:flex sm:items-center">
+              <svg class="text-blue-500" xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem"
+                fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path
+                  d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z" />
+              </svg>
+              <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                <h3 class="text-lg font-semibold leading-6 text-gray-900" id="modal-title">
+                  Nova Reserva
+                </h3>
+              </div>
+            </div>
+          </div>
+          <form hx-post="{{ url_for('reserve.store') }}" hx-target="#tbody_content" hx-swap="beforeend transition:true"
+            x-on:htmx:after-request="if(event.detail.successful){ modal.close(); toastService.success('Sala reservada com sucesso!') } else { toastService.error(event.detail.xhr.responseText) }"
+            class="px-4 pb-4 sm:px-6 sm:pb-4">
+            <div class="p-5">
+              <div class="mt-2 bg-none">
+                <div class="flex items-center justify-between">
+                  <label for="user" class="block text-sm font-medium leading-6 text-gray-900">Nome<span
+                      class="text-red-600 font-bold"> *</span></label>
+                </div>
+                <div class="mt-2">
+                  <input name="user" onkeydown="return /[^\d]/i.test(event.key)" required type="text" id="user"
+                    placeholder="Insira o nome do responsável"
+                    class="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" />
+                </div>
+              </div>
+
+              <div class="mt-2 bg-none">
+                <div class="flex items-center justify-between">
+                  <label for="room" class="block text-sm font-medium leading-6 text-gray-900">Número da Sala<span
+                      class="text-red-600 font-bold"> *</span></label>
+                </div>
+                <div class="mt-2">
+                  <input name="room" required type="number" id="room" placeholder="Insira o número da Sala"
+                    class="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" />
+                </div>
+              </div>
+
+              <div class="mt-2 grid grid-cols-6 gap-3">
+                <div class="mt-2 bg-none col-span-4">
+                  <div class="flex items-center justify-between">
+                    <label for="date" class="block text-sm font-medium leading-6 text-gray-900">Data<span
+                        class="text-red-600 font-bold"> *</span></label>
+                  </div>
+                  <input name="date" required type="date" id="date"
+                    class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" />
+                </div>
+                <div class="mt-2 bg-none col-span-2">
+                  <div class="flex items-center justify-between">
+                    <label for="time" class="block text-sm font-medium leading-6 text-gray-900">Hora<span
+                        class="text-red-600 font-bold"> *</span></label>
+                  </div>
+                  <input name="time" required type='time' id="time" step="600"
+                    class="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" />
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+              <button type="submit"
+                class="inline-flex w-full justify-center rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto">
+                Salvar
+              </button>
+              <button type="button" @click="modal.close()"
+                class="mt-3 inline-flex w-full justify-center rounded-lg bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="fixed bottom-0 right-0 p-6 flex flex-col space-y-4 z-50">
+    <template x-for="(toast, index) in toastService.toasts" :key="index">
+      <div x-show="toast.visible" x-transition:enter="transition ease-out duration-300 transform"
+        x-transition:enter-start="translate-y-8 opacity-0" x-transition:enter-end="translate-y-0 opacity-100"
+        x-transition:leave="transition ease-in duration-300 transform" x-transition:leave-start="opacity-100"
+        x-transition:leave-end="translate-x-full opacity-0"
+        :class="toast.type === 'error' ? 'bg-red-200': 'bg-green-200'"
+        class="shadow-lg rounded-xl p-4 relative w-full opacity-80 min-w-64">
+        <div class="flex flex-start justify-between gap-4">
+          <div class="mt-1">
+            <template x-if="toast.type === 'error'">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="text-red-500 bi bi-x-circle-fill" viewBox="0 0 16 16">
+                <path
+                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+              </svg>
+            </template>
+            <template x-if="toast.type === 'success'">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                class="text-green-500 bi bi-check-circle-fill"
+                viewBox="0 0 16 16">
+                <path
+                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+              </svg>
+            </template>
+          </div>
+          <div>
+            <p x-text="toast.type === 'error' ? 'Erro': 'Sucesso'" class="text-gray-800 font-semibold"></p>
+            <p x-text="toast.message" class="text-sm"></p>
+          </div>
+          <button @click="toastService.removeToast(index)"
+            :class="toast.type === 'error' ? 'hover:text-red-500': 'hover:text-green-500'"
+            class="font-semibold flex items-start mt-[2px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x"
+              viewBox="0 0 16 16">
+              <path
+                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
 {% endblock %}
