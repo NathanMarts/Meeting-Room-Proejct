@@ -7,13 +7,8 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <script src="https://unpkg.com/htmx.org@1.9.12"></script>
   <script src="{{ url_for('static', filename='app.js') }}"></script>
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
   <title>{% block title %}{% endblock %}</title>
-  <style>
-    tr.htmx-swapping td {
-      opacity: 0;
-      transition: opacity 0.5s ease-out;
-    }
-  </style>
 </head>
 <body>
   {% block content %}{% endblock %}

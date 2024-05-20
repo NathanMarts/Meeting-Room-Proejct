@@ -1,0 +1,15 @@
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 85%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+tr.htmx-swapping td {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}

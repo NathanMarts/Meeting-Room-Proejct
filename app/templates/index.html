@@ -10,7 +10,7 @@
           <p class="text-gray-700 text-lg mt-2">Listagem de todas as reservas, incluindo id, sala, reservado para, data
             e hora.</p>
         </div>
-        <div class="sm:flex sm:mt-0 ml-16 mt-4">
+        <div class="sm:flex sm:mt-0 mt-4">
           <button hx-swap="beforeend" @click="modal.open()"
             class="flex justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm  bg-blue-600 text-white hover:bg-blue-500">Nova
             Reserva</button>
@@ -33,31 +33,33 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="rounded-lg border border-gray-200 shadow-md my-5">
-        <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
-          <thead class="bg-gray-50">
-            <tr>
-              <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                Id
-              </th>
-              <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                Reservado para
-              </th>
-              <th scope="col" class="px-6 py-4 font-medium text-gray-900 cursor-pointer">
-                Sala
-              </th>
-              <th scope="col" class="px-6 py-4 font-medium text-gray-900 cursor-pointer">
-                Data - Hora
-              </th>
-              <th scope="col" class="px-6 py-4 font-medium text-gray-900 text-center">Operações</th>
-            </tr>
-          </thead>
-          <tbody hx-confirm="Tem certeza de que deseja deletar?" hx-target="closest tr" hx-swap="outerHTML swap:1s"
-            id="tbody_content" class="divide-y divide-gray-100 border-t border-gray-100">
-            {% include "components/table.html" %}
-          </tbody>
-        </table>
+        <div class="rounded-lg border border-gray-200 shadow-md my-5 overflow-x-auto">
+          <div class="align-middle min-w-full inline-block">
+            <table class="min-w-full border-collapse bg-white text-left text-sm text-gray-500">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+                    Id
+                  </th>
+                  <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+                    Reservado para
+                  </th>
+                  <th scope="col" class="px-6 py-4 font-medium text-gray-900 cursor-pointer">
+                    Sala
+                  </th>
+                  <th scope="col" class="px-6 py-4 font-medium text-gray-900 cursor-pointer">
+                    Data - Hora
+                  </th>
+                  <th scope="col" class="px-6 py-4 font-medium text-gray-900 text-center">Operações</th>
+                </tr>
+              </thead>
+              <tbody hx-confirm="Tem certeza de que deseja deletar?" hx-target="closest tr" hx-swap="outerHTML swap:1s"
+                id="tbody_content" class="divide-y divide-gray-100 border-t border-gray-100">
+                {% include "components/table.html" %}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>
