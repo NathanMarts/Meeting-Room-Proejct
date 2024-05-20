@@ -6,7 +6,8 @@
   <td class="px-6 py-4">{{ reserve.id }}</td>
   <td class="px-6 py-4">{{ reserve.user }}</td>
   <td class="px-6 py-4">{{ reserve.room }}</td>
-  <td class="px-6 py-4">{{ reserve.date_time.strftime('%d/%m/%Y - %H:%M') }}</td>
+  <td class="px-6 py-4">{{ reserve.date_time.strftime('%d/%m/%Y') }}</td>
+  <td class="px-6 py-4">{{ reserve.date_time.strftime('%H:%M') }}</td>
   <td class="px-6 py-4">
     <div class="flex justify-center gap-3">
       <a class="group relative" hx-delete={{ url_for('reserve.destroy', id=reserve['id']) }} x-on:htmx:after-request="if(event.detail.successful){ toastService.success('Reserva deletada com sucesso!') }">
