@@ -24,4 +24,4 @@ $ flask --app app run
 ```
 
 ## Status
-![Em andamento](https://img.shields.io/badge/status-Em-andamento-yellow)
+![Em andamento](https://img.shields.io/badge/status-EmAndamento-yellow)
