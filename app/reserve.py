@@ -31,7 +31,7 @@ def search():
 @bp.route('/<int:id>')
 def show(id):
   reserve = get_reserve(id)
-  return render_template('index.html', reserve=reserve)
+  return render_template('components/show.html', reserve=reserve)
 
 @bp.route('/', methods=["POST"])
 def store():

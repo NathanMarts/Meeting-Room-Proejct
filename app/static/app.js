@@ -1,6 +1,12 @@
 function data() {
   return {
-    modal: {
+    newReserveModal: {
+      show: false,
+      open() { this.show = true },
+      close() { this.show = false },
+      isOpen() { return this.show },
+    },
+    reserveModal: {
       show: false,
       open() { this.show = true },
       close() { this.show = false },

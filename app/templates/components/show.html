@@ -1,0 +1,32 @@
+<div class="col-span-1 py-6">
+  <dt class="font-medium text-gray-900 text-sm leading-6">
+    Reservado para
+  </dt>
+  <dd class="text-gray-700 leading-4 text-sm mt-2">
+    {{ reserve.user }}
+  </dd>
+</div>
+<div class="col-span-1 py-6">
+  <dt class="font-medium text-gray-900 text-sm leading-6">
+    Sala
+  </dt>
+  <dd class="text-gray-700 leading-4 text-sm mt-2">
+    {{ reserve.room }}
+  </dd>
+</div>
+<div class="col-span-1 py-6 border-t">
+  <dt class="font-medium text-gray-900 text-sm leading-6">
+    Data
+  </dt>
+  <dd class="text-gray-700 leading-4 text-sm mt-2">
+    {{ reserve.date_time.strftime('%d/%m/%Y') }}
+  </dd>
+</div>
+<div class="col-span-1 py-6 border-t">
+  <dt class="font-medium text-gray-900 text-sm leading-6">
+    Hora
+  </dt>
+  <dd class="text-gray-700 leading-4 text-sm mt-2">
+    {{ reserve.date_time.strftime('%H:%M') }}
+  </dd>
+</div>

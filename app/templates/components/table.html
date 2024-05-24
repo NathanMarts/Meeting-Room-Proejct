@@ -1,38 +1,71 @@
-{% if not reservations %}
-<td class="px-6 py-4">Nenhuma reserva registrada.</td>
-{% else %}
-{% for reserve in reservations %}
-<tr id="reserve_{{reserve.id}}" class="hover:bg-gray-50">
-  <td class="px-6 py-4">{{ reserve.id }}</td>
-  <td class="px-6 py-4">{{ reserve.user }}</td>
-  <td class="px-6 py-4">{{ reserve.room }}</td>
-  <td class="px-6 py-4">{{ reserve.date_time.strftime('%d/%m/%Y') }}</td>
-  <td class="px-6 py-4">{{ reserve.date_time.strftime('%H:%M') }}</td>
-  <td class="px-6 py-4">
-    <div class="flex justify-center gap-3">
-      <a class="group relative" hx-delete={{ url_for('reserve.destroy', id=reserve['id']) }} x-on:htmx:after-request="if(event.detail.successful){ toastService.success('Reserva deletada com sucesso!') }">
-        <svg class="hover:text-orange-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="23"
-          height="23" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-          <path
-            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-          <path
-            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-        </svg>
-        <div class="invisible group-hover:visible absolute bottom-[150%] left-[-3.33rem] z-10 space-y-1 bg-gray-900 text-gray-50 text-sm rounded px-4 py-2 max-w-xs shadow-md" role="tooltip" aria-hidden="true"">
-          <p class="tooltip">Deletar</p>
+<table class="min-w-full border-collapse bg-white text-left text-sm text-gray-500">
+  <thead class="bg-gray-50">
+    <tr>
+      <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+        Id
+      </th>
+      <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+        Reservado para
+      </th>
+      <th scope="col" class="px-6 py-4 font-medium text-gray-900 cursor-pointer">
+        Sala
+      </th>
+      <th scope="col" class="px-6 py-4 font-medium text-gray-900 cursor-pointer">
+        Data
+      </th>
+      <th scope="col" class="px-6 py-4 font-medium text-gray-900 cursor-pointer">
+        Hora
+      </th>
+      <th scope="col" class="px-6 py-4 font-medium text-gray-900 text-center">Operações</th>
+    </tr>
+  </thead>
+  <tbody hx-target="closest tr" hx-swap="outerHTML swap:1s"
+    id="tbody_content" class="divide-y divide-gray-100 border-t border-gray-100">
+    {% if not reservations %}
+    <td class="px-6 py-4">Nenhuma reserva registrada.</td>
+    {% else %}
+    {% for reserve in reservations %}
+    <tr id="reserve_{{reserve.id}}" class="hover:bg-gray-50">
+      <td class="px-6 py-4">{{ reserve.id }}</td>
+      <td class="px-6 py-4">{{ reserve.user }}</td>
+      <td class="px-6 py-4">{{ reserve.room }}</td>
+      <td class="px-6 py-4">{{ reserve.date_time.strftime('%d/%m/%Y') }}</td>
+      <td class="px-6 py-4">{{ reserve.date_time.strftime('%H:%M') }}</td>
+      <td class="px-6 py-4">
+        <div class="flex justify-center gap-3">
+          <a class="group relative" hx-delete="{{ url_for('reserve.destroy', id=reserve['id']) }}" hx-confirm="Tem certeza de que deseja deletar?"
+            x-on:htmx:after-request="if(event.detail.successful){ toastService.success('Reserva deletada com sucesso!') }">
+            <svg class="hover:text-orange-500 cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="23" height="23"
+              fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+            </svg>
+            <div
+              class="invisible group-hover:visible absolute bottom-[150%] left-[-3.33rem] z-10 space-y-1 bg-gray-900 text-gray-50 text-sm rounded px-4 py-2 max-w-xs shadow-md"
+              role="tooltip" aria-hidden="true"">
+          <p class=" tooltip">Deletar</p>
+            </div>
+          </a>
+          <a hx-get="{{ url_for('reserve.show', id=reserve['id']) }}" @click="reserveModal.open()" hx-target="#reserve-modal-content" hx-swap="innerHTML" class="group relative">
+            <svg class="hover:text-orange-500" xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+              fill="currentColor" class="bi bi-file-text" viewBox="0 0 16 16">
+              <path
+                d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z" />
+              <path
+                d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1" />
+            </svg>
+            <div
+              class="invisible group-hover:visible absolute bottom-[150%] left-[-5.65rem] z-10 space-y-1 bg-gray-900 text-gray-50 text-sm rounded px-4 py-2 max-w-xs shadow-md"
+              role="tooltip" aria-hidden="true"">
+              <p class=" tooltip">Detalhamento</p>
+            </div>
+          </a>
         </div>
-      </a>
-      <a class="group relative" href="#">
-        <svg class="hover:text-orange-500" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-file-text" viewBox="0 0 16 16">
-          <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z"/>
-          <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/>
-        </svg>
-        <div class="invisible group-hover:visible absolute bottom-[150%] left-[-5.65rem] z-10 space-y-1 bg-gray-900 text-gray-50 text-sm rounded px-4 py-2 max-w-xs shadow-md" role="tooltip" aria-hidden="true"">
-          <p class="tooltip">Detalhamento</p>
-        </div>
-      </a>
-    </div>
-  </td>
-</tr>
-{% endfor %}
-{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+  </tbody>
+</table>
