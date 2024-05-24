@@ -1,0 +1,44 @@
+
+<div class="fixed bottom-0 right-0 p-6 flex flex-col space-y-4 z-50">
+  <template x-for="(toast, index) in toastService.toasts" :key="index">
+    <div x-show="toast.visible" x-transition:enter="transition ease-out duration-300 transform"
+      x-transition:enter-start="translate-y-8 opacity-0" x-transition:enter-end="translate-y-0 opacity-100"
+      x-transition:leave="transition ease-in duration-300 transform" x-transition:leave-start="opacity-100"
+      x-transition:leave-end="translate-x-full opacity-0"
+      :class="toast.type === 'error' ? 'bg-red-200': 'bg-green-200'"
+      class="shadow-lg rounded-xl p-4 relative w-full opacity-80 min-w-64">
+      <div class="flex flex-start justify-between gap-4">
+        <div class="mt-1">
+          <template x-if="toast.type === 'error'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="text-red-500 bi bi-x-circle-fill" viewBox="0 0 16 16">
+              <path
+                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+            </svg>
+          </template>
+          <template x-if="toast.type === 'success'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+              class="text-green-500 bi bi-check-circle-fill"
+              viewBox="0 0 16 16">
+              <path
+                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+            </svg>
+          </template>
+        </div>
+        <div>
+          <p x-text="toast.type === 'error' ? 'Erro': 'Sucesso'" class="text-gray-800 font-semibold"></p>
+          <p x-text="toast.message" class="text-sm"></p>
+        </div>
+        <button @click="toastService.removeToast(index)"
+          :class="toast.type === 'error' ? 'hover:text-red-500': 'hover:text-green-500'"
+          class="font-semibold flex items-start mt-[2px]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x"
+            viewBox="0 0 16 16">
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </template>
+</div>
