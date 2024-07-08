@@ -62,7 +62,7 @@ def store():
       get_db().commit()
       newReserve = get_reserve(db.lastrowid)
   
-  return render_template('components/newReserve.html', reserve=newReserve)
+  return render_template('components/newReserveRow.html', reserve=newReserve)
 
 @bp.route('/<int:id>', methods=["DELETE"])
 def destroy(id):
